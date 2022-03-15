@@ -1,7 +1,7 @@
 <template>
-    <div v-show="completedtaskslist.length">
+    <div v-show="CompletedTasks.length">
         <ul>
-            <li v-for=" (task,index) in completedtaskslist" :key="index">
+            <li v-for=" (task,index) in CompletedTasks" :key="index">
                 <p>Title: {{task.task_title}}</p>
                 <p>Description: {{task.task_description}}</p>
                 <div class="form-buttons">
@@ -16,28 +16,14 @@
 </template>
 
 <script>
+import { mapActions, mapState } from 'vuex'
 export default {
     name:'CompletedComponent',
-    props: {
-        completedtaskslist:{
-            type:Array,
-            required:true
-        }
-    },
-    data(){
-        return {
-        }
-    } ,
     methods: {
-        moveToDeleted(task){
-            this.$emit("move-to-deleted",task)
-        },
-        moveToTodo(task){
-            this.$emit("move-to-todo",task)
-        },
-        moveToOngoing(task){
-            this.$emit("move-to-ongoing",task)
-        }
+        ...mapActions(["moveToTodo","moveToOngoing","moveToDeleted"])
+    },
+    computed:{
+        ...mapState(["CompletedTasks"])
     }
 }
 </script>

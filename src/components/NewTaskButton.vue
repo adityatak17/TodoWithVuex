@@ -1,6 +1,6 @@
 <template>
     <div id="new-task-div">
-        <button @click="buttonClicked" 
+        <button @click="$store.state.addForm=true" 
                 class="button" 
                 id="new-task-button">
             Add a New Task
@@ -11,10 +11,5 @@
 <script>
 export default {
     name:'NewTaskButton',
-    methods: {
-        buttonClicked(){
-            this.$emit('new-task-button-clicked')
-        }
-    }
 }
 </script>

@@ -1,5 +1,5 @@
 <template>
-    <form class="new-task-form" autocomplete="off" v-show="addform" @submit.prevent="newTaskFormSubmit">
+    <form class="new-task-form" autocomplete="off" v-show="$store.state.addForm" @submit.prevent="newTaskFormSubmit">
         <fieldset id="field-set">
             <legend id="legend">
                     Add New Task:
@@ -13,15 +13,15 @@
             <div id="addingButtons">
                     <input type="submit" 
                             id="button0"
-                            @click="status='todolist'"    
+                            @click=" status='todolist' "    
                             value="Add to To Do List"><br>
                     <input type="submit"
                             id="button1"
-                            @click="status='ongoing'"
+                            @click=" status='ongoing' "
                             value="Add to Ongoing Tasks"><br>
                     <input type="submit"
                             id="button2"
-                            @click="status='completed'"
+                            @click=" status='completed' "
                             value="Add to Completed"><br>
             </div>
             <input type="submit"
@@ -34,14 +34,10 @@
 
 <script>
 import axios from 'axios'
+import { mapActions } from 'vuex'
+
 export default {
     name:'NewTaskForm',
-    props:{
-        addform:{
-            type:Boolean,
-            required:true
-        }
-    },
     data(){
         return {
             title:'',
@@ -54,7 +50,7 @@ export default {
         async newTaskFormSubmit(){
 
             if (this.buttonid==3) {
-                this.$emit("task-adding-done")
+                this.$store.state.addForm=false
             }
             else { 
                 if(this.title=='' || this.description==''){
@@ -67,15 +63,18 @@ export default {
                     task_status:this.status         
                 }
                 await axios.post('http://localhost:8000/tasks/',newTaskCreated)
+                this.getTasks()
+
                 // location.reload() **(To manually reload the page)**
-                this.$emit("new-task-added")
             }
+
             // To Reset the form data
             this.title=''
             this.description=''
             this.status='todolist'
             this.buttonid=0
-        }
+        },
+        ...mapActions(["getTasks"])
     }
 }
 </script>

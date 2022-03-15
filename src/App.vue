@@ -1,6 +1,6 @@
 <template>  
-  <NewTaskButton @new-task-button-clicked="addForm=true" />
-  <NewTaskForm @task-adding-done="addForm=false" @new-task-added="getTasks" :addform="addForm" />
+  <NewTaskButton />
+  <NewTaskForm  />
   <table>
       <tr>
         <th>Todo Tasks</th>
@@ -10,43 +10,23 @@
       <tr>
         <td>
           <!-- To Do List Component -->
-          <TodoComponent  @move-to-ongoing="moveToOngoing" 
-                          @move-to-completed="moveToCompleted" 
-                          @move-to-deleted="moveToDeleted" 
-                          :todotaskslist="TodoTasks">
-          </TodoComponent>
+          <TodoComponent />
         </td>
         <td>
           <!-- Ongoing Task Component -->
-          <OngoingComponent   @move-to-completed="moveToCompleted"
-                              @move-to-deleted="moveToDeleted"
-                              @move-to-todo="moveToTodo"
-                              :ongoingtaskslist="OngoingTasks">
-          </OngoingComponent>
+          <OngoingComponent />
         </td>
         <td>
             <!-- Completed Task Component -->
-            <CompletedComponent @move-to-deleted="moveToDeleted"
-                                @move-to-todo="moveToTodo"
-                                @move-to-ongoing="moveToOngoing"
-                                :completedtaskslist="CompletedTasks">
-            </CompletedComponent>
+            <CompletedComponent />
         </td>
       </tr>
     </table>
 
     <!-- Button to Show Deleted Tasks -->
-    <DeletedTaskButton @deleted-task-button-clicked="deleteForm=!deleteForm" 
-                             :deleteform="deleteForm">
-    </DeletedTaskButton>
+    <DeletedTaskButton />
     <!-- Deleted Task Component -->
-    <DeletedComponent @move-to-todo="moveToTodo"
-                      @move-to-ongoing="moveToOngoing"
-                      @move-to-completed="moveToCompleted" 
-                      @permanently-delete-task="PermanentDeleteTask"
-                      :deletedtaskslist="DeletedTasks"
-                      :deleteform="deleteForm">
-    </DeletedComponent>
+    <DeletedComponent />
   
 </template>
 
@@ -59,9 +39,7 @@ import OngoingComponent from "./components/OngoingComponent.vue";
 import CompletedComponent from "./components/CompletedComponent.vue";
 import DeletedTaskButton from "./components/DeletedTaskButton.vue";
 import DeletedComponent from "./components/DeletedComponent.vue";
-
-import axios from 'axios';
-// import {mapState,mapGetters,mapMutations,mapActions} from 'vuex'
+import { mapActions } from 'vuex';
 
 export default {
   name: "App",
@@ -74,59 +52,8 @@ export default {
     DeletedTaskButton,
     DeletedComponent,
   },
-  data(){
-    return {
-      addForm: false,
-      deleteForm: false,
-      TodoTasks: [],
-      OngoingTasks: [],
-      CompletedTasks: [],
-      DeletedTasks: [],
-    };
-  },
-  methods: {
-    async moveToOngoing(task) {
-      await axios.patch(`http://localhost:8000/tasks/${task.id}/`,{task_status:'ongoing'});
-      this.getTasks();
-    },
-    async moveToCompleted(task) {
-      await axios.patch(`http://localhost:8000/tasks/${task.id}/`,{task_status:'completed'});
-      this.getTasks();
-    },
-    async moveToDeleted(task) {
-      await axios.patch(`http://localhost:8000/tasks/${task.id}/`,{task_status:'deleted'});
-      this.getTasks();
-    },
-    async moveToTodo(task) {
-      await axios.patch(`http://localhost:8000/tasks/${task.id}/`,{task_status:'todolist'});
-      this.getTasks();
-    },
-    async getTasks(){
-      this.TodoTasks=[]
-      this.OngoingTasks=[]
-      this.CompletedTasks=[]
-      this.DeletedTasks=[]
-
-      const response = await axios.get(`http://localhost:8000/tasks/`)
-      response.data.forEach(task=>{
-        if(task.task_status=='todolist'){ 
-          this.TodoTasks.push(task)
-        }
-        else if(task.task_status=='ongoing'){   
-          this.OngoingTasks.push(task)
-        }
-        else if(task.task_status=='completed'){ 
-          this.CompletedTasks.push(task)
-        }
-        else{
-          this.DeletedTasks.push(task)
-        }
-      })
-    },
-    async PermanentDeleteTask(task){
-      await axios.delete(`http://localhost:8000/tasks/${task.id}/`);
-      this.getTasks();
-    }
+  methods:{
+    ...mapActions(["getTasks"])
   },
   async created() {
     this.getTasks()
