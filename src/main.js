@@ -11,9 +11,8 @@ export const store=createStore({
             OngoingTasks: [],
             CompletedTasks: [],
             DeletedTasks: [],
-            Editting:false,
-            Title:'',
-            Description:''
+            Title: '',
+            Description: ''
         }
     },
     mutations:{
@@ -51,21 +50,21 @@ export const store=createStore({
             await axios.patch(`http://localhost:8000/tasks/${task.id}/`,{task_status:'completed'});
             context.dispatch('getTasks')
           },
-        async moveToDeleted(context,task) {
+        async moveToDeleted({dispatch},task) {
             await axios.patch(`http://localhost:8000/tasks/${task.id}/`,{task_status:'deleted'});
-            context.dispatch('getTasks')
+            dispatch('getTasks')
           },
-        async moveToTodo(context,task) {
+        async moveToTodo({dispatch},task) {
             await axios.patch(`http://localhost:8000/tasks/${task.id}/`,{task_status:'todolist'});
-            context.dispatch('getTasks')
+            dispatch('getTasks')
           },
-        async EditTask(context,id){
-            await axios.patch(`http://localhost:8000/tasks/${id}/`,{task_title:`${this.Title}`,task_description:`${this.Description}`})
-            context.dispatch('getTasks')
+        async EditTask({state,dispatch},task){
+            await axios.patch(`http://localhost:8000/tasks/${task.id}/`,{task_title:`${state.Title}`,task_description:`${state.Description}`})
+            dispatch('getTasks')
         }, 
-        async PermanentDeleteTask(context,task){
+        async PermanentDeleteTask({dispatch},task){
             await axios.delete(`http://localhost:8000/tasks/${task.id}/`);
-            context.dispatch('getTasks')
+            dispatch('getTasks')
           }
     }
 })
