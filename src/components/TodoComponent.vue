@@ -1,9 +1,8 @@
 <template>
     <div v-show="TodoTasks.length">
         <ul>
-            <li v-for=" (task,index) in TodoTasks" :key="index" >
-                <EdittingComponent :task="task" :tasktype="task_type">
-                </EdittingComponent>
+            <li v-for="(task,index) in TodoTasks" :key="index" >
+                <EdittingComponent :task="task" :tasktype="task_type" />
             </li>
         </ul>
     </div>

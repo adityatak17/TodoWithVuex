@@ -232,4 +232,23 @@ th{
 td{
     padding: 0;
 }
+#editting-div input{
+    text-align: center;
+}
+#editting-button{
+    width: 100%;
+    font-size: 15px;
+    padding: 3px;
+    border-radius: 20px;
+    margin-top: 25px;
+    background-color: #BBDBD1; 
+    color: #416165;
+    font-weight: 550;
+    cursor: pointer;
+}
+
+#editting-button:hover,#button3:hover{
+    background-color: #416165; 
+    color: #BBDBD1;
+}
 </style>
