@@ -11,8 +11,6 @@ export const store=createStore({
             OngoingTasks: [],
             CompletedTasks: [],
             DeletedTasks: [],
-            Title: '',
-            Description: ''
         }
     },
     mutations:{
@@ -58,12 +56,8 @@ export const store=createStore({
             await axios.patch(`http://localhost:8000/tasks/${task.id}/`,{task_status:'todolist'});
             dispatch('getTasks')
           },
-        async EditTask({state,dispatch},task){
-          console.log(state.Title)
-            await axios.patch(`http://localhost:8000/tasks/${task.id}/`,{task_title:`${state.Title}`,task_description:`${state.Description}`})
-            state.Title=''
-            state.Description=''
-            console.log(state.Title)
+        async EditTask({dispatch},{task,title,description}){
+            await axios.patch(`http://localhost:8000/tasks/${task.id}/`,{task_title:`${title}`,task_description:`${description}`})
             dispatch('getTasks')
         }, 
         async PermanentDeleteTask({dispatch},task){
