@@ -1,4 +1,5 @@
 <template>
+            <template v-if="editting==false">
             <p>Title:   {{task.task_title}}</p>
             <p>Description: {{task.task_description}}</p>
             <div class="form-buttons">
@@ -9,6 +10,7 @@
                 <button v-if="tasktype=='deleted'" class="button" @click="PermanentDeleteTask(task)">Permanently Delete This Task</button>
                 <button class="button" @click="EditTaskDetails(task)">Edit This Task</button>
             </div>
+            </template>
             
     <form class="new-task-form" id="editting-div" autocomplete="off" v-show="editting" @submit.prevent="EditTask({task,title,description})">
             <input  type="text"
